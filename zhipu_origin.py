@@ -1,6 +1,5 @@
 import os
 
-from docx.shared import Pt
 from openai import OpenAI
 from docx import Document
 
@@ -11,7 +10,7 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_path = "文档11.docx"
+input_doc_path = "word2.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -312,7 +311,6 @@ def tiqujinju():
                 # 将内容按行添加到文档
                 for line in modified_content.splitlines():
                     p = doc.add_paragraph(line)
-                    p.style.font.size = Pt(12)  # 例如设置字体大小为12pt
                 # 保存文档
                 doc.save(output_file_path)
 
