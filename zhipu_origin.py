@@ -10,7 +10,7 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_path = "word2.docx"
+input_doc_name = "word3.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -29,7 +29,7 @@ big_group_size = 100
 
 def splitDoc():
     # 读取输入的Word文档
-    input_doc = Document(input_doc_path)
+    input_doc = Document(input_doc_name)
 
     # 将文档中的所有段落拼接成一个完整的字符串group_size
     full_text = "\n".join([para.text for para in input_doc.paragraphs])
@@ -66,7 +66,7 @@ def splitDoc():
                 doc.add_paragraph(title_and_content)
 
             # 定义输出路径
-            output_path = os.path.join(output_dir, f'' + input_doc_path.replace(".docx", "") + '_' + str(i) + '.docx')
+            output_path = os.path.join(output_dir, f'' + input_doc_name.replace(".docx", "") + '_' + str(i) + '.docx')
             doc.save(output_path)
             print(f"文档已保存: {output_path}")
 
@@ -195,7 +195,7 @@ def combine_word_documents_for_big():
                 merged_document.add_page_break()
 
         # 保存合并后的文档
-        output_path = os.path.join(combine_folder_big, f'merged_document_{i + 1}.docx')
+        output_path = os.path.join(combine_folder_big, f'merged_document_' + input_doc_name)
         merged_document.save(output_path)
         print(f'Saved merged document {output_path}')
 
@@ -295,7 +295,7 @@ def tiqujinju():
 
                 # 文件路径
                 output_file_path = os.path.join(finally_combine_jinju_folder,
-                                                input_doc_path.replace(".docx","") + "jinju.docx")
+                                                input_doc_name.replace(".docx", "") + "jinju.docx")
 
                 # 如果文件不存在，则创建一个新文档
                 if not os.path.exists(output_file_path):
@@ -325,8 +325,8 @@ def tiqujinju():
 
 
 if __name__ == '__main__':
-   splitDoc()
-   loopParse()
-   combine_word_documents()
-   combine_word_documents_for_big()
+   # splitDoc()
+   # loopParse()
+   # combine_word_documents()
+   # combine_word_documents_for_big()
    tiqujinju()
