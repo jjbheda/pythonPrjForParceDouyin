@@ -43,7 +43,7 @@ def split_excel(file_path, output_dir, chunk_size):
 
 def main():
     # 输入文件路径和拆分行数
-    file_path = 'douyin4.xlsx'  # 替换为你的Excel文件路径
+    file_path = 'douyin_26.xlsx'  # 替换为你的Excel文件路径
     output_dir = 'execl_directory'  # 替换为你希望保存文件的输出目录
     chunk_size = 199  # 每个新文件的行数，可以根据需求更改
 

@@ -8,13 +8,14 @@ from docx import Document
 
 import threading
 import datetime
+import quchongFile
 
 client = OpenAI(
     api_key="aecefa8c98656304dd5f26a3c6656bab.ne82Z5rap89I8H3d",
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_name = "word_yanbojun.docx"
+input_doc_name = "古易金加洲3.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -27,7 +28,7 @@ combine_folder_big = 'output_documents_big_combine'
 #最终生成一个合订本
 finally_combine_jinju_folder = 'output_documents_total_jinju_combine'
 jinju_md_file_path = 'jinju.md'
-group_size = 5
+group_size = 10
 big_group_size = 200
 
 
@@ -271,6 +272,7 @@ def zhipuparse(filepath):
                  "content": asr_text + "  请针对以上这段中的“## 视频ASR文本：”部分进行标点符号的补全，如果有错别字，请一并修订。"
                                        "直接输出结果，不需要给出修改提示，例如这样的提示\"修改后的文本已经补全了标点符号，并修正了一些语序上的小问题，以提高语句的通顺性和可读性。\"。"
                                        "不要输出修改了哪些内容的提示，例如'（注：以上文本中，“g l j ”应为不规范的缩写或打字错误，但因为没有上下文信息，无法确定具体应为何词或短语，故不做修改。"
+                                       "请务必注意不要保留修改提示语句，例如“（注：以上文本中，错别字和不通顺的语句已经根据上下文进行了修改，并补全了标点符号。 还有类似这种“由于原文中包含很多方言和口语表达，某些地方可能理解有误，未能完全反映原意，还请谅解。””"
                                       }
 
             ],
@@ -364,6 +366,7 @@ def tiqujinju(filename):
                 p.style.font.size = Pt(12)  # 例如设置字体大小为12pt
             # 保存文档
             doc.save(output_file_path)
+            quchongFile.remove_duplicate_lines_and_replace_text(output_file_path)
 
         except Exception as e:
             print(f"处理文件 {file_path} 时发生错误: {e}")
