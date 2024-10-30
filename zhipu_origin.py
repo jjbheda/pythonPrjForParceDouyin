@@ -15,7 +15,7 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_name = "part4.docx"
+input_doc_name = "part7.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -63,7 +63,7 @@ def splitDoc():
     # 读取输入的Word文档
     input_doc = Document(input_doc_name)
 
-    # 将文档中的所有段落拼接成一个完整的字符串group_size
+    # 将文档中的所有段落拼接成一个完整的字符串
     full_text = "\n".join([para.text for para in input_doc.paragraphs])
 
     # 使用 "https://www.douyin.com/video/" 作为分隔符进行文本分割
@@ -74,10 +74,10 @@ def splitDoc():
 
     # 遍历每个分割后的部分，从第二部分开始，因为第一部分是分隔前的内容
     for i, section in enumerate(sections[1:], start=1):
-        if "未找到视频ASR文本。" in section:
-            # Skip this section if it contains the specific phrase
+        # 跳过包含特定短语的部分
+        if "未找到视频ASR文本" in section:
             print(f"跳过包含 '## 未找到视频ASR文本。' 的段落，视频ID: {section.split()[0]}")
-            continue  # Skip to the next section
+            continue  # Skip this section
 
         if section.strip():  # 忽略空部分
             doc = Document()
@@ -108,6 +108,7 @@ def splitDoc():
             print(f"文档已保存: {output_path}")
 
     print(f"文档拆分完成，共生成 {len(sections) - 1} 个文件，保存在目录: {output_dir}")
+
 
 def process_files(file_list, thread_name):
     for filepath in file_list:
@@ -206,7 +207,7 @@ def combine_word_documents_for_big():
         os.makedirs(combine_folder_big)
 
     # 获取所有Word文档
-    word_files = [f for f in os.listdir(output_dir_new) if f.endswith('.docx')]
+    word_files = [f for f in os.listdir(combine_folder) if f.endswith('.docx')]
     word_files.sort()  # 可选：排序文件
 
     # 确定需要创建的文档数量
@@ -221,7 +222,7 @@ def combine_word_documents_for_big():
 
         # 添加每个文件的内容到新文档
         for j in range(start_index, min(end_index, len(word_files))):
-            doc_path = os.path.join(output_dir_new, word_files[j])
+            doc_path = os.path.join(combine_folder, word_files[j])
             sub_doc = Document(doc_path)
             for para in sub_doc.paragraphs:  # 正确的添加段落内容
                 merged_document.add_paragraph(para.text)
@@ -277,6 +278,7 @@ def zhipuparse(filepath):
                                        "直接输出结果，不需要给出修改提示，例如这样的提示\"修改后的文本已经补全了标点符号，并修正了一些语序上的小问题，以提高语句的通顺性和可读性。\"。"
                                        "不要输出修改了哪些内容的提示，例如'（注：以上文本中，“g l j ”应为不规范的缩写或打字错误，但因为没有上下文信息，无法确定具体应为何词或短语，故不做修改。"
                                        "请务必注意不要保留修改提示语句，例如“（注：以上文本中，错别字和不通顺的语句已经根据上下文进行了修改，并补全了标点符号。 还有类似这种“由于原文中包含很多方言和口语表达，某些地方可能理解有误，未能完全反映原意，还请谅解。””"
+                                       "再比如这种提示词，也不要保留”（注：文本中已补全标点符号，并修正了部分语序和用词，以提高语句的通顺性和可读性。“"
                                       }
 
             ],
