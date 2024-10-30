@@ -74,7 +74,7 @@ def splitDoc():
 
     # 遍历每个分割后的部分，从第二部分开始，因为第一部分是分隔前的内容
     for i, section in enumerate(sections[1:], start=1):
-        if "## 未找到视频ASR文本。" in section:
+        if "未找到视频ASR文本。" in section:
             # Skip this section if it contains the specific phrase
             print(f"跳过包含 '## 未找到视频ASR文本。' 的段落，视频ID: {section.split()[0]}")
             continue  # Skip to the next section
