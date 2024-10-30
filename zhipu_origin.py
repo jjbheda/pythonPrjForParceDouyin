@@ -15,7 +15,7 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_name = "古易金加洲3.docx"
+input_doc_name = "part4.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -28,7 +28,7 @@ combine_folder_big = 'output_documents_big_combine'
 #最终生成一个合订本
 finally_combine_jinju_folder = 'output_documents_total_jinju_combine'
 jinju_md_file_path = 'jinju.md'
-group_size = 10
+group_size = 5
 big_group_size = 200
 
 
@@ -74,6 +74,11 @@ def splitDoc():
 
     # 遍历每个分割后的部分，从第二部分开始，因为第一部分是分隔前的内容
     for i, section in enumerate(sections[1:], start=1):
+        if "## 未找到视频ASR文本。" in section:
+            # Skip this section if it contains the specific phrase
+            print(f"跳过包含 '## 未找到视频ASR文本。' 的段落，视频ID: {section.split()[0]}")
+            continue  # Skip to the next section
+
         if section.strip():  # 忽略空部分
             doc = Document()
             # 恢复视频链接并提取其余部分
@@ -98,12 +103,11 @@ def splitDoc():
                 doc.add_paragraph(title_and_content)
 
             # 定义输出路径
-            output_path = os.path.join(output_dir, f'' + input_doc_name.replace(".docx", "") + '_' + str(i) + '.docx')
+            output_path = os.path.join(output_dir, f'{input_doc_name.replace(".docx", "")}_{i}.docx')
             doc.save(output_path)
             print(f"文档已保存: {output_path}")
 
     print(f"文档拆分完成，共生成 {len(sections) - 1} 个文件，保存在目录: {output_dir}")
-
 
 def process_files(file_list, thread_name):
     for filepath in file_list:
