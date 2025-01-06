@@ -13,7 +13,9 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_name = "c_part2.docx"
+AI_Model = "glm-4-flash"
+
+input_doc_name = "x_part1.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -269,7 +271,7 @@ def zhipuparse(filepath):
         asr_text = sections[1].strip()  # 如果找到合适的分割文本，获取并去除首尾空格
 
         completion = client.chat.completions.create(
-            model="glm-4",
+            model= AI_Model,
             messages=[
                 {"role": "system", "content": "你是一位中文专家，标点符号专家"},
                 {"role": "user",
@@ -334,7 +336,7 @@ def tiqujinju(filename):
             full_text = "\n".join([para.text for para in input_doc.paragraphs])
 
             completion = client.chat.completions.create(
-                model="glm-4",
+                model= AI_Model,
                 messages=[
                     {"role": "system", "content": "你是一位自媒体领域的大V"},
                     {"role": "user",
