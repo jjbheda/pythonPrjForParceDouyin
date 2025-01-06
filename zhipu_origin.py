@@ -1,11 +1,9 @@
 import os
 import shutil
-from os import replace
 
+from docx import Document
 from docx.shared import Pt
 from openai import OpenAI
-from docx import Document
-
 import threading
 import datetime
 import quchongFile
@@ -15,7 +13,7 @@ client = OpenAI(
     base_url="https://open.bigmodel.cn/api/paas/v4/"
 )
 
-input_doc_name = "part9.docx"
+input_doc_name = "c_part2.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -29,7 +27,7 @@ combine_folder_big = 'output_documents_big_combine'
 finally_combine_jinju_folder = 'output_documents_total_jinju_combine'
 jinju_md_file_path = 'jinju.md'
 group_size = 5
-big_group_size = 200
+big_group_size = 100
 
 
 def  init():
@@ -225,7 +223,8 @@ def combine_word_documents_for_big():
             doc_path = os.path.join(combine_folder, word_files[j])
             sub_doc = Document(doc_path)
             for para in sub_doc.paragraphs:  # 正确的添加段落内容
-                merged_document.add_paragraph(para.text)
+                merged_document.add_paragraph(para.text
+                                              .replace("', refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)",""))
 
             # 添加页面断裂（如果需要）
             if j < end_index - 1:  # 不在最后一个文档后添加分页符
@@ -365,6 +364,8 @@ def tiqujinju(filename):
             modified_content = (jinjiu_content \
                 .replace("', refusal=None, role='assistant', function_call=None, tool_calls=None)", "") \
                 .replace("ChatCompletionMessage(content='", "").replace("', role='assistant', function_call=None, tool_calls=None)","")
+                .replace("', refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)","")
+                .replace(", refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)","")
                 .replace("你是一位中文专家，标点符号专家，以下是针对你提供文本的标点符号补全和错别字的修订：",""))
             # 将内容按行添加到文档
             for line in modified_content.splitlines():
