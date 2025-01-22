@@ -16,7 +16,7 @@ client = OpenAI(
 
 AI_Model = "glm-4-flash"
 
-input_doc_name = "helaoshi1.docx"
+input_doc_name = "helaoshi2.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -451,12 +451,12 @@ if __name__ == '__main__':
     # 记录开始时间
    start_time = datetime.datetime.now()
    print(f"开始时间: {start_time}")
-   # init()
-   # splitDoc()
-   # loopParse()
-   # combine_word_documents()
-   # combine_word_documents_for_big()
-   # loopParsetiqujinju()
+   init()
+   splitDoc()
+   loopParse()
+   combine_word_documents()
+   combine_word_documents_for_big()
+   loopParsetiqujinju()
    comile_jinju()
 
    end_time = datetime.datetime.now()
