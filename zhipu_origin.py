@@ -7,6 +7,7 @@ from openai import OpenAI
 import threading
 import datetime
 import quchongFile
+import wordfix
 
 client = OpenAI(
     api_key="aecefa8c98656304dd5f26a3c6656bab.ne82Z5rap89I8H3d",
@@ -15,7 +16,7 @@ client = OpenAI(
 
 AI_Model = "glm-4-flash"
 
-input_doc_name = "x_part1.docx"
+input_doc_name = "helaoshi1.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
@@ -350,6 +351,7 @@ def tiqujinju(filename):
                 temperature=0.9
             )
             jinjiu_content = str(completion.choices[0].message)
+            jinjiu_content = jinjiu_content.replace('\\n', '\n')
             print(jinjiu_content)
 
             # 文件路径
@@ -375,7 +377,6 @@ def tiqujinju(filename):
                 p.style.font.size = Pt(12)  # 例如设置字体大小为12pt
             # 保存文档
             doc.save(output_file_path)
-            quchongFile.remove_duplicate_lines_and_replace_text(output_file_path)
 
         except Exception as e:
             print(f"处理文件 {file_path} 时发生错误: {e}")
@@ -435,16 +436,29 @@ def loopParsetiqujinju():
         print("所有文件处理完成。")
 
 
+def comile_jinju():
+    jinju_file_path = os.path.join(finally_combine_jinju_folder,
+                                    input_doc_name.replace(".docx", "") + "jinju.docx")
+
+    combine_jinju_file_path = os.path.join(finally_combine_jinju_folder,
+                                   input_doc_name.replace(".docx", "") + "jinju_finally.docx")
+    content = wordfix.read_word_file(jinju_file_path)
+    if content:
+        jingles, contra_views, hooks = wordfix.process_text(content)
+        wordfix.write_word_file(jingles, contra_views, hooks, combine_jinju_file_path)
+
 if __name__ == '__main__':
     # 记录开始时间
    start_time = datetime.datetime.now()
    print(f"开始时间: {start_time}")
-   init()
-   splitDoc()
-   loopParse()
-   combine_word_documents()
-   combine_word_documents_for_big()
-   loopParsetiqujinju()
+   # init()
+   # splitDoc()
+   # loopParse()
+   # combine_word_documents()
+   # combine_word_documents_for_big()
+   # loopParsetiqujinju()
+   comile_jinju()
+
    end_time = datetime.datetime.now()
    print(f"结束时间: {end_time}")
    # 计算并打印运行时间
