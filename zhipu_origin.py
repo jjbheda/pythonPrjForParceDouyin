@@ -6,7 +6,6 @@ from docx.shared import Pt
 from openai import OpenAI
 import threading
 import datetime
-import quchongFile
 import wordfix
 
 client = OpenAI(
@@ -16,7 +15,7 @@ client = OpenAI(
 
 AI_Model = "glm-4-flash"
 
-input_doc_name = "helaoshi2.docx"
+input_doc_name = "helaoshi4.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 

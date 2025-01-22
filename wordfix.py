@@ -3,7 +3,7 @@ from docx import Document
 import re
 
 def process_text(content):
-    # 使用列表来维护顺序，并使用集合进行去重
+    # 维护顺序并去重
     jingles = []
     contra_views = []
     hooks = []
@@ -13,9 +13,9 @@ def process_text(content):
     seen_hooks = set()
 
     category_mapping = {
-        "1. 金句": (jingles, seen_jingles),
-        "2. 反共识观点": (contra_views, seen_contra_views),
-        "3. 钩子语句": (hooks, seen_hooks)
+        "金句：": (jingles, seen_jingles),
+        "反共识观点：": (contra_views, seen_contra_views),
+        "钩子语句：": (hooks, seen_hooks)
     }
 
     current_category = None
@@ -25,17 +25,16 @@ def process_text(content):
         line = line.strip()
         if line in category_mapping:
             current_category = category_mapping[line]
-        elif re.match(r"^\d+\.", line):
-            if current_category:
-                # 找到第一个点后的位置，并提取从该位置开始的句子
-                index = line.find('.') + 1
-                sentence = line[index:].strip().strip('"')
+        elif current_category:
+            # 使用正则表达式以支持数字后多种格式的点
+            match = re.match(r"^(\d+)\.\s*(.*)$", line)
+            if match:
+                sentence = match.group(2).strip('"')
                 if sentence not in current_category[1]:
                     current_category[0].append(sentence)
                     current_category[1].add(sentence)
 
     return jingles, contra_views, hooks
-
 def read_word_file(file_path):
     try:
         document = Document(file_path)
@@ -74,11 +73,5 @@ def write_word_file(jingles, contra_views, hooks, output_path):
 
 
 if __name__ == '__main__':
-    file_path = 'helaoshi1jinju_modified.docx'  # Update this path to your actual file path
-    output_path = 'processed_output.docx'  # Update this path to your desired output file path
-    content = read_word_file(file_path)
-    if content:
-        jingles, contra_views, hooks = process_text(content)
-        write_word_file(jingles, contra_views, hooks, output_path)
-    else:
-        print("Failed to read content. Please check the file path and permissions.")
+
+    print("Failed to read content. Please check the file path and permissions.")
