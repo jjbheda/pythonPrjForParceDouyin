@@ -15,7 +15,7 @@ client = OpenAI(
 
 AI_Model = "glm-4-flash"
 
-input_doc_name = "helaoshi4.docx"
+input_doc_name = "yizhou_4.docx"
 output_dir = 'output_documents'
 output_dir_new = 'output_documents_new'
 
